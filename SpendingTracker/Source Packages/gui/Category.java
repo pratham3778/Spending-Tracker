@@ -28,15 +28,16 @@ public class Category extends javax.swing.JFrame {
              int sno = 0;
              while(rs.next()) {
                  String category = rs.getString("category");
-          //(using array)     
+          // (using array)     
 //               Object o[] = {++sno,category};
 //               dtm.addRow(o);
-          //(using collection)
+          // (using collection)
                  java.util.Vector row = new java.util.Vector();
                  row.add(++sno);
                  row.add(category);
                  dtm.addRow(row);
              }
+             c.close();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex);
         }
@@ -188,7 +189,18 @@ public class Category extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void DeleteActionPerformed(java.awt.event.ActionEvent evt) {                                       
-        // TODO add your handling code here:
+        int ri = table.getSelectedRow();
+        String category = (String) table.getValueAt(ri, 1);
+        try { 
+            Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/spendingdb"+"?useSSL=false", "root", "pratham3778");
+             Statement s = c.createStatement();
+             s.executeUpdate("delete from category_info where category='"+category+"'");
+             JOptionPane.showMessageDialog(null, "Category Deleted Successfully!");
+             getEntries();
+             c.close();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
     }                                      
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
@@ -254,3 +266,4 @@ public class Category extends javax.swing.JFrame {
     private javax.swing.JTable table;
     // End of variables declaration                   
 }
+
