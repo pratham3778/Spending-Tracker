@@ -22,9 +22,8 @@ public class Category extends javax.swing.JFrame {
             while(rc--!= 0) {
                 dtm.removeRow(0);
             }
-            Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/spendingdb"+"?useSSL=false", "root", "pratham3778");
-             Statement s = c.createStatement();
-             ResultSet rs = s.executeQuery("select * from category_info");
+            
+             ResultSet rs = db.DbConnect.st.executeQuery("select * from category_info");
              int sno = 0;
              while(rs.next()) {
                  String category = rs.getString("category");
@@ -37,7 +36,6 @@ public class Category extends javax.swing.JFrame {
                  row.add(category);
                  dtm.addRow(row);
              }
-             c.close();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex);
         }
@@ -192,12 +190,10 @@ public class Category extends javax.swing.JFrame {
         int ri = table.getSelectedRow();
         String category = (String) table.getValueAt(ri, 1);
         try { 
-            Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/spendingdb"+"?useSSL=false", "root", "pratham3778");
-             Statement s = c.createStatement();
-             s.executeUpdate("delete from category_info where category='"+category+"'");
+            
+             db.DbConnect.st.executeUpdate("delete from category_info where category='"+category+"'");
              JOptionPane.showMessageDialog(null, "Category Deleted Successfully!");
-             getEntries();
-             c.close();
+             getEntries();           
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex);
         }
@@ -205,13 +201,10 @@ public class Category extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         try {
-            String category = t.getText();
-             Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/spendingdb"+"?useSSL=false", "root", "pratham3778");
-             Statement s = c.createStatement();
-             s.executeUpdate("insert into category_info values('"+category+"')");
+            String category = t.getText();             
+             db.DbConnect.st.executeUpdate("insert into category_info values('"+category+"')");
              JOptionPane.showMessageDialog(null, "Category Added Successfully!");
              getEntries();
-             c.close();
         } catch(SQLIntegrityConstraintViolationException ex) {
             JOptionPane.showMessageDialog(null, "Category Already Exist");
         }catch(Exception ex) {
