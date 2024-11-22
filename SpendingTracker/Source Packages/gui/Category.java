@@ -187,7 +187,9 @@ public class Category extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void DeleteActionPerformed(java.awt.event.ActionEvent evt) {                                       
-        int ri = table.getSelectedRow();
+        int r = JOptionPane.showConfirmDialog(null, "Do you want to Delete?", "Deletion Confirmation", JOptionPane.YES_NO_OPTION);
+        if(r == JOptionPane.YES_OPTION) {
+            int ri = table.getSelectedRow();
         String category = (String) table.getValueAt(ri, 1);
         try { 
             
@@ -197,14 +199,20 @@ public class Category extends javax.swing.JFrame {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex);
         }
+        
+        }
     }                                      
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         try {
-            String category = t.getText();             
+            String category = t.getText();
+            if(!category.equals("")) {
              db.DbConnect.st.executeUpdate("insert into category_info values('"+category+"')");
              JOptionPane.showMessageDialog(null, "Category Added Successfully!");
              getEntries();
+            } else {
+                JOptionPane.showMessageDialog(null, "Please enter any Category");
+            }
         } catch(SQLIntegrityConstraintViolationException ex) {
             JOptionPane.showMessageDialog(null, "Category Already Exist");
         }catch(Exception ex) {
@@ -259,4 +267,3 @@ public class Category extends javax.swing.JFrame {
     private javax.swing.JTable table;
     // End of variables declaration                   
 }
-
